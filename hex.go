@@ -21,6 +21,7 @@ func HexToBytes(h []byte) []byte {
 }
 
 // XorBytes performs a binary XOR between two byte slices of the same length.
+// If the length is different it fails.
 func XorBytes(b1, b2 []byte) []byte {
 	if len(b1) != len(b2) {
 		log.Fatalf("len(b1) == %v != len(b2) == %v", len(b1), len(b2))
