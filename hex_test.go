@@ -34,3 +34,13 @@ func TestXorBytes(t *testing.T) {
 		t.Errorf("got %v, want %v", result, expected)
 	}
 }
+
+func TestXorBytesWithVal(t *testing.T) {
+	bs := []byte{0x78, 0x33, 0x51, 0xac}
+	var b byte = 0x55
+	expected := []byte{0x2d, 0x66, 0x04, 0xf9}
+	result := XorBytesWithVal(bs, b)
+	if bytes.Compare(result, expected) != 0 {
+		t.Errorf("got %v, want %v", result, expected)
+	}
+}
