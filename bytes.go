@@ -3,6 +3,7 @@ package hackutils
 import (
 	"bytes"
 	"log"
+	"math/bits"
 )
 
 // XorBytes performs a binary XOR between two byte slices of the same length.
@@ -42,4 +43,15 @@ func XorWithRepeatingMask(bs []byte, mask []byte) []byte {
 	fullmask = append(fullmask, mask[:lb-len(fullmask)]...)
 
 	return XorBytes(bs, fullmask)
+}
+
+// HammingDistance computes the hamming distance (number of bits that are
+// different) between b1 and b2.
+func HammingDistance(b1, b2 []byte) int64 {
+	delta := XorBytes(b1, b2)
+	total := 0
+	for _, d := range delta {
+		total += bits.OnesCount8(d)
+	}
+	return int64(total)
 }

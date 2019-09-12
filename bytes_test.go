@@ -2,6 +2,7 @@ package hackutils
 
 import (
 	"bytes"
+	"strconv"
 	"testing"
 )
 
@@ -48,5 +49,27 @@ func TestXorWithRepeatingMask(t *testing.T) {
 	expected3 := expected1[:2]
 	if bytes.Compare(result3, expected3) != 0 {
 		t.Errorf("got %v, want %v", result3, expected3)
+	}
+}
+
+func Test(t *testing.T) {
+	var tests = []struct {
+		b1     []byte
+		b2     []byte
+		expect int64
+	}{
+		{[]byte{0x01, 0x02, 0x03}, []byte{0x01, 0x02, 0x03}, 0},
+		{[]byte{0x01, 0x02, 0x03}, []byte{0x03, 0x02, 0x03}, 1},
+		{[]byte{0x01, 0x02, 0x03}, []byte{0x02, 0x03, 0x04}, 6},
+		{[]byte("this is a test"), []byte("wokka wokka!!!"), 37},
+		{bytes.Repeat([]byte{0xff, 0x55}, 50), bytes.Repeat([]byte{0xff, 0xaa}, 50), 400},
+	}
+	for i, tt := range tests {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			result := HammingDistance(tt.b1, tt.b2)
+			if result != tt.expect {
+				t.Errorf("got %v, want %v", result, tt.expect)
+			}
+		})
 	}
 }
