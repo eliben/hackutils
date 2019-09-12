@@ -1,6 +1,9 @@
 package hackutils
 
-import "log"
+import (
+	"bytes"
+	"log"
+)
 
 // XorBytes performs a binary XOR between two byte slices of the same length.
 // If the length is different it fails. Returns a new byte slice with the
@@ -24,4 +27,19 @@ func XorBytesWithVal(bs []byte, b byte) []byte {
 		out[i] = bs[i] ^ b
 	}
 	return out
+}
+
+// XorWithRepeatingMask performs a binary XOR between bs and mask, with mask
+// repeated enough times to cover the length of bs. For example, with a 10-byte
+// bs and the mask "XYZ", bs will be XOR-ed with "XYZXYZXYZX". Note that just
+// enough of the mask is taken to cover the leftovers.
+func XorWithRepeatingMask(bs []byte, mask []byte) []byte {
+	lb := len(bs)
+	lm := len(mask)
+
+	fullreps := lb / lm
+	fullmask := bytes.Repeat(mask, fullreps)
+	fullmask = append(fullmask, mask[:lb-len(fullmask)]...)
+
+	return XorBytes(bs, fullmask)
 }

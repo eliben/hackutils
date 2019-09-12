@@ -24,3 +24,29 @@ func TestXorBytesWithVal(t *testing.T) {
 		t.Errorf("got %v, want %v", result, expected)
 	}
 }
+
+func TestXorWithRepeatingMask(t *testing.T) {
+	mask := []byte{0xff, 0xf0, 0x0f}
+	bs := []byte{0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77}
+
+	// full bs: has one leftover byte
+	result1 := XorWithRepeatingMask(bs, mask)
+	expected1 := []byte{0xee, 0xd2, 0x3c, 0xbb, 0xa5, 0x69, 0x88}
+	if bytes.Compare(result1, expected1) != 0 {
+		t.Errorf("got %v, want %v", result1, expected1)
+	}
+
+	// just 6 bytes of bs: no leftover
+	result2 := XorWithRepeatingMask(bs[:6], mask)
+	expected2 := expected1[:6]
+	if bytes.Compare(result2, expected2) != 0 {
+		t.Errorf("got %v, want %v", result2, expected2)
+	}
+
+	// bs shorter than mask
+	result3 := XorWithRepeatingMask(bs[:2], mask)
+	expected3 := expected1[:2]
+	if bytes.Compare(result3, expected3) != 0 {
+		t.Errorf("got %v, want %v", result3, expected3)
+	}
+}
