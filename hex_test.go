@@ -24,3 +24,12 @@ func TestHexToBytes(t *testing.T) {
 		})
 	}
 }
+
+func TestHexReaderToBytes(t *testing.T) {
+	buf := bytes.NewBuffer([]byte("ab0702\n0409\nab"))
+	expected := []byte{0xab, 0x07, 0x02, 0x04, 0x09, 0xab}
+	result := HexReaderToBytes(buf)
+	if bytes.Compare(result, expected) != 0 {
+		t.Errorf("got %v, want %v", result, expected)
+	}
+}
