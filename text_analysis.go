@@ -19,6 +19,7 @@ func FrequencyDistributionScore(bs []byte) float64 {
 	hist := make([]int64, 26)
 
 	var total int
+	var nonprintable int
 
 	for _, b := range bs {
 		if b >= 65 && b <= 90 {
@@ -28,6 +29,10 @@ func FrequencyDistributionScore(bs []byte) float64 {
 		if b >= 97 && b <= 122 {
 			hist[b-97]++
 			total++
+		}
+
+		if b < 11 || (b > 15 && b < 32) {
+			nonprintable++
 		}
 	}
 
@@ -40,6 +45,9 @@ func FrequencyDistributionScore(bs []byte) float64 {
 	if badchars*3 >= len(bs) {
 		penalty = 0.15 * (float64(badchars) - math.Floor(float64(len(bs))/3.0))
 	}
+
+	// We also add a penalty of 0.15 for each non-printable character
+	penalty += 0.15 * float64(nonprintable)
 
 	// Here hist is a histogram of the appearance of the 26 letters in bs. total
 	// is the sum of the histogram. We normalize it to a probability distribution.

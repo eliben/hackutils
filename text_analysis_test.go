@@ -11,6 +11,7 @@ func TestFrequencyDistributionScore(t *testing.T) {
 		[]byte("this a slightly less standard zkzkzkk"),
 		[]byte("cxvpqewkw ssylkvjcxyq sadfpqlkzxhgfri"),
 		[]byte("xc@#$dcf,.xs@24309u8@#08753 .][/12aaa"),
+		[]byte("xc\x02#$dcf,.xs@24309u8@#08753 .][/12aaa"),
 	}
 
 	var scores []float64
