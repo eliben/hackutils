@@ -1,6 +1,9 @@
 package hackutils
 
-import "math"
+import (
+	"fmt"
+	"math"
+)
 
 // Probability distribution for the 26 alphabetic letters in English.
 var masterFreq = []float64{
@@ -31,10 +34,12 @@ func FrequencyDistributionScore(bs []byte) float64 {
 			total++
 		}
 
-		if b < 11 || (b > 15 && b < 32) {
+		if b < 9 || (b > 13 && b < 32) {
+			fmt.Println(b)
 			nonprintable++
 		}
 	}
+	fmt.Println("**", len(bs), total, nonprintable)
 
 	// Here total is the number of alpha chars in the string, and len(bs) is the
 	// number of all chars. Heuristically we don't expect more than 20-25% of
