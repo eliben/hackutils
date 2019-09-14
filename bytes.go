@@ -2,6 +2,7 @@ package hackutils
 
 import (
 	"bytes"
+	crand "crypto/rand"
 	"log"
 	"math/bits"
 )
@@ -54,4 +55,14 @@ func HammingDistance(b1, b2 []byte) int64 {
 		total += bits.OnesCount8(d)
 	}
 	return int64(total)
+}
+
+// RandBytes returns a new buffer with n random bytes.
+func RandBytes(n int) []byte {
+	b := make([]byte, n)
+	_, err := crand.Read(b)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return b
 }

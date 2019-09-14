@@ -52,7 +52,7 @@ func TestXorWithRepeatingMask(t *testing.T) {
 	}
 }
 
-func Test(t *testing.T) {
+func TestHammingDistance(t *testing.T) {
 	var tests = []struct {
 		b1     []byte
 		b2     []byte
@@ -71,5 +71,25 @@ func Test(t *testing.T) {
 				t.Errorf("got %v, want %v", result, tt.expect)
 			}
 		})
+	}
+}
+
+func TestRandBytes(t *testing.T) {
+	b := RandBytes(32)
+	if len(b) != 32 {
+		t.Errorf("len(b) == %v, want 32", len(b))
+	}
+
+	// Sanity check that the bytes returned are not all equal (this *can* happen
+	// randomly but the chances are negligibly low).
+	foundDiff := false
+	for i := 1; i < len(b); i++ {
+		if b[i] != b[i-1] {
+			foundDiff = true
+			break
+		}
+	}
+	if !foundDiff {
+		t.Errorf("all bytes in b are equal, something's wrong")
 	}
 }
