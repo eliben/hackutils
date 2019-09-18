@@ -3,8 +3,10 @@ package hackutils
 import (
 	"bytes"
 	crand "crypto/rand"
+	"fmt"
 	"log"
 	"math/bits"
+	"strings"
 )
 
 // XorBytes performs a binary XOR between two byte slices of the same length.
@@ -65,4 +67,39 @@ func RandBytes(n int) []byte {
 		log.Fatal(err)
 	}
 	return b
+}
+
+// DumpBytesGrid dumps b as a grid broken down into blocks, each block with
+// size blockSize. Each block gets a line. It prepends two spaces to each
+// emitted line. For example, for bs with 1..10 and blockSize of 4 it will
+// emit something like:
+//
+//       0  1  2  3
+//     ------------
+//   0| 01 02 03 04
+//   4| 05 06 07 08
+//   8| 09 0A
+func DumpBytesGrid(bs []byte, blockSize int) string {
+	// First, emit the horizontal offset header.
+	var sb strings.Builder
+	sb.WriteString("      ")
+	for i := 0; i < blockSize; i++ {
+		sb.WriteString(fmt.Sprintf("%2d ", i))
+	}
+	sb.WriteString("\n")
+	sb.WriteString("     " + strings.Repeat("---", blockSize) + "\n")
+
+	// Emit bytes, line by line.
+	for n := 0; n < len(bs); n += blockSize {
+		sb.WriteString(fmt.Sprintf("%4d| ", n))
+		for i := n; i < n+blockSize; i++ {
+			if i >= len(bs) {
+				break
+			}
+			sb.WriteString(fmt.Sprintf("%02X ", bs[i]))
+		}
+		sb.WriteString("\n")
+	}
+
+	return sb.String()
 }

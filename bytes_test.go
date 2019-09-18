@@ -3,6 +3,7 @@ package hackutils
 import (
 	"bytes"
 	"strconv"
+	"strings"
 	"testing"
 )
 
@@ -91,5 +92,20 @@ func TestRandBytes(t *testing.T) {
 	}
 	if !foundDiff {
 		t.Errorf("all bytes in b are equal, something's wrong")
+	}
+}
+
+func TestDumpBytesGrid(t *testing.T) {
+	bs := []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	expected := `
+       0  1  2  3 
+     ------------
+   0| 01 02 03 04 
+   4| 05 06 07 08 
+   8| 09 0A `
+
+	result := DumpBytesGrid(bs, 4)
+	if strings.TrimSpace(expected) != strings.TrimSpace(result) {
+		t.Errorf("got %v, want %v", result, expected)
 	}
 }
