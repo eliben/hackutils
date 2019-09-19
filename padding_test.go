@@ -36,6 +36,7 @@ func TestStripPKCS7Padding(t *testing.T) {
 		result []byte
 	}{
 		{[]byte{10, 20, 1}, false, []byte{10, 20}},
+		{[]byte{10, 20, 0}, true, nil},
 		{[]byte{10, 2, 2}, false, []byte{10}},
 		{[]byte{1, 3, 3, 3}, false, []byte{1}},
 		{[]byte{10, 20, 2}, true, nil},

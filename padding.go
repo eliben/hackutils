@@ -21,9 +21,9 @@ func PKCS7Padding(data []byte, blockLen int) []byte {
 // padding is incorrect.
 func StripPKCS7Padding(data []byte) ([]byte, error) {
 	// Look at the last byte of padding. For N, expect the last N bytes to be
-	// equal to N and strip them.
+	// equal to N and strip them. 0 is invalid padding.
 	npad := data[len(data)-1]
-	if len(data) <= int(npad) {
+	if npad == 0 || len(data) <= int(npad) {
 		return nil, fmt.Errorf("padding error: len(data)=%v, npad=%d", len(data), npad)
 	}
 
