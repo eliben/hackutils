@@ -3,6 +3,7 @@ package hackutils
 import (
 	"bytes"
 	crand "crypto/rand"
+	"encoding/binary"
 	"fmt"
 	"log"
 	"math/bits"
@@ -102,4 +103,15 @@ func DumpBytesGrid(bs []byte, blockSize int) string {
 	}
 
 	return sb.String()
+}
+
+// PackUint64LE encodes the given integer into a 8-byte little-endian binary
+// buffer.
+func PackUint64LE(u uint64) []byte {
+	buf := new(bytes.Buffer)
+	err := binary.Write(buf, binary.LittleEndian, u)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return buf.Bytes()
 }

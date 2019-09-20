@@ -2,6 +2,7 @@ package hackutils
 
 import (
 	"bytes"
+	"fmt"
 	"strconv"
 	"strings"
 	"testing"
@@ -107,5 +108,25 @@ func TestDumpBytesGrid(t *testing.T) {
 	result := DumpBytesGrid(bs, 4)
 	if strings.TrimSpace(expected) != strings.TrimSpace(result) {
 		t.Errorf("got %v, want %v", result, expected)
+	}
+}
+
+func TestPackUint64LE(t *testing.T) {
+	var tests = []struct {
+		in  uint64
+		out []byte
+	}{
+		{0, []byte{0, 0, 0, 0, 0, 0, 0, 0}},
+		{1, []byte{1, 0, 0, 0, 0, 0, 0, 0}},
+		{258, []byte{2, 1, 0, 0, 0, 0, 0, 0}},
+		{0x202122, []byte{34, 33, 32, 0, 0, 0, 0, 0}},
+	}
+	for _, tt := range tests {
+		t.Run(fmt.Sprintf("%v", tt.in), func(t *testing.T) {
+			result := PackUint64LE(tt.in)
+			if bytes.Compare(result, tt.out) != 0 {
+				t.Errorf("got %v, want %v", result, tt.out)
+			}
+		})
 	}
 }
