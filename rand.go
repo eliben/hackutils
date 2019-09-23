@@ -1,5 +1,8 @@
 package hackutils
 
+// Implementation of the Mersenne Twister PRNG algorithm, following the
+// constants and pseudocode from https://en.wikipedia.org/wiki/Mersenne_Twister,
+// for the 32-bit version.
 const mtW = 32
 const mtN = 624
 const mtM = 397
@@ -22,6 +25,7 @@ type MT19937 struct {
 	index uint32
 }
 
+// NewMT19937 creates a new MT PRNG with the given seed.
 func NewMT19937(seed uint32) *MT19937 {
 	mt := new(MT19937)
 	mt.state[0] = seed
