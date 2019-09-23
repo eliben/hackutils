@@ -43,6 +43,7 @@ func (mt *MT19937) Next() uint32 {
 		mt.twist()
 	}
 
+	// Tempering.
 	y := mt.state[mt.index]
 	y ^= ((y >> mtU) & mtD)
 	y ^= ((y << mtS) & mtB)

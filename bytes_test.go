@@ -130,3 +130,23 @@ func TestPackUint64LE(t *testing.T) {
 		})
 	}
 }
+
+func TestU32ToBits(t *testing.T) {
+	var tests = []struct {
+		in  uint32
+		out [32]byte
+	}{
+		{0, [32]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
+		{1, [32]byte{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
+		{0xF2, [32]byte{0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
+		{0x6A0000F2, [32]byte{0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0}},
+	}
+	for _, tt := range tests {
+		t.Run(fmt.Sprintf("%0x", tt.in), func(t *testing.T) {
+			result := U32ToBits(tt.in)
+			if result != tt.out {
+				t.Errorf("got %v, want %v", result, tt.out)
+			}
+		})
+	}
+}
