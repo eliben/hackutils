@@ -117,7 +117,7 @@ func PackUint64LE(u uint64) []byte {
 }
 
 // U32ToBits converts a uint32 to its explicit bit-by-bit representation, where
-// out[i] is the i-th bit of u (0 is the lsb, 31 the msb).
+// out[i] is the i-th bit of u as little-endian (0 is the lsb, 31 the msb).
 func U32ToBits(u uint32) [32]byte {
 	var bits [32]byte
 
@@ -126,6 +126,17 @@ func U32ToBits(u uint32) [32]byte {
 	for pos = 0; pos < 32; pos++ {
 		bits[pos] = byte((u >> pos) & 0x01)
 	}
-
 	return bits
+}
+
+// BitsToU32 converts a little-endian bit-by-bit represetnation to a uint32.
+// Inverse of U32ToBits.
+func BitsToU32(bits [32]byte) uint32 {
+	var u uint32
+
+	var pos uint32
+	for pos = 0; pos < 32; pos++ {
+		u |= uint32(bits[pos]) << pos
+	}
+	return u
 }

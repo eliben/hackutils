@@ -150,3 +150,40 @@ func TestU32ToBits(t *testing.T) {
 		})
 	}
 }
+
+func TestBitsToU32(t *testing.T) {
+	var tests = []struct {
+		in  [32]byte
+		out uint32
+	}{
+		{[32]byte{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 1},
+		{[32]byte{0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0}, 0x6A0000F2},
+	}
+	for _, tt := range tests {
+		t.Run(fmt.Sprintf("%0x", tt.in), func(t *testing.T) {
+			result := BitsToU32(tt.in)
+			if result != tt.out {
+				t.Errorf("got %v, want %v", result, tt.out)
+			}
+		})
+	}
+}
+
+func TestBitsU32Roundtrip(t *testing.T) {
+	var tests = []uint32{
+		0x00,
+		0x0201,
+		0x80000000,
+		0x1234ABCD,
+		0xC0FFEEEE,
+	}
+	for _, tt := range tests {
+		t.Run(fmt.Sprintf("%0x", tt), func(t *testing.T) {
+			bits := U32ToBits(tt)
+			out := BitsToU32(bits)
+			if out != tt {
+				t.Errorf("got %v, want %v", out, tt)
+			}
+		})
+	}
+}
