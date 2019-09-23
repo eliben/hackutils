@@ -37,3 +37,17 @@ func TestMT(t *testing.T) {
 		t.Errorf("saw %v values, want %v", numSaw, len(ref))
 	}
 }
+
+func TestMTDeterministic(t *testing.T) {
+	mt1 := NewMT19937(123)
+	mt2 := NewMT19937(123)
+
+	for i := 0; i < 2000; i++ {
+		n1 := mt1.Next()
+		n2 := mt2.Next()
+
+		if n1 != n2 {
+			t.Errorf("at %v: %v != %v", i, n1, n2)
+		}
+	}
+}
