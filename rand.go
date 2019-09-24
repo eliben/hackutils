@@ -20,14 +20,14 @@ const mtL = 18
 const mtLowerMask uint32 = (1 << mtR) - 1
 const mtUpperMask uint32 = ^mtLowerMask
 
-type MT19937 struct {
+type mt19937 struct {
 	state [mtN]uint32
 	index uint32
 }
 
 // NewMT19937 creates a new MT PRNG with the given seed.
-func NewMT19937(seed uint32) *MT19937 {
-	mt := new(MT19937)
+func NewMT19937(seed uint32) *mt19937 {
+	mt := new(mt19937)
 	mt.state[0] = seed
 	mt.index = mtN
 
@@ -38,7 +38,7 @@ func NewMT19937(seed uint32) *MT19937 {
 	return mt
 }
 
-func (mt *MT19937) Next() uint32 {
+func (mt *mt19937) Next() uint32 {
 	if mt.index >= mtN {
 		mt.twist()
 	}
@@ -54,7 +54,7 @@ func (mt *MT19937) Next() uint32 {
 	return y
 }
 
-func (mt *MT19937) twist() {
+func (mt *mt19937) twist() {
 	for i := 0; i < mtN; i++ {
 		x := (mt.state[i] & mtUpperMask) + (mt.state[(i+1)%mtN] & mtLowerMask)
 		xA := x >> 1
