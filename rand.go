@@ -1,5 +1,7 @@
 package hackutils
 
+import "fmt"
+
 // Implementation of the Mersenne Twister PRNG algorithm, following the
 // constants and pseudocode from https://en.wikipedia.org/wiki/Mersenne_Twister,
 // for the 32-bit version.
@@ -36,6 +38,19 @@ func NewMT19937(seed uint32) *mt19937 {
 		mt.state[i] = mtF*(xn1^(xn1>>(mtW-2))) + uint32(i)
 	}
 	return mt
+}
+
+// NewMT19937FromState creates a new MT PRNG with the given state.
+func NewMT19937FromState(state [mtN]uint32, index uint32) *mt19937 {
+	mt := new(mt19937)
+	mt.state = state
+	mt.index = index
+	return mt
+}
+
+func (mt *mt19937) DumpState() {
+	fmt.Println("state:", mt.state)
+	fmt.Println("index:", mt.index)
 }
 
 func (mt *mt19937) Next() uint32 {
